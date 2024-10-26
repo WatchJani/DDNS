@@ -4,16 +4,21 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"rot/ddns"
+	"root/cmd"
+	"root/ddns"
 	"time"
 )
 
 func main() {
-	ddns_api, err := ddns.New(5 * time.Minute)
+	path := cmd.Flags()
+
+	conf, err := ddns.LoadConfiguration(path)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
+
+	ddns_api := ddns.New(5*time.Minute, conf)
 
 	fmt.Println("My current Ip addres", ddns_api.IP_ADDRESS)
 

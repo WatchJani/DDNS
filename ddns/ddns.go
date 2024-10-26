@@ -19,23 +19,17 @@ type DDNS struct {
 	timeUpdater time.Duration
 }
 
-func New(time time.Duration) (*DDNS, error) {
-	conf, err := LoadConfiguration()
-	if err != nil {
-		return nil, err
-	}
-
+func New(time time.Duration, conf *Configuration) *DDNS {
 	return &DDNS{
 		Configuration: conf,
 		timeUpdater:   time,
-	}, nil
+	}
 }
 
 type Configuration struct {
-	Zone_ID   string `json:"ZONE_ID"`
-	Record_ID string `json:"RECORD_ID"`
-	API_Token string `json:"API_TOKEN"`
-
+	Zone_ID    string `json:"ZONE_ID"`
+	Record_ID  string `json:"RECORD_ID"`
+	API_Token  string `json:"API_TOKEN"`
 	IP_ADDRESS string `json:"CURRENT_IP_ADDRESS"`
 }
 
@@ -43,8 +37,8 @@ func newConfiguration() *Configuration {
 	return &Configuration{}
 }
 
-func LoadConfiguration() (*Configuration, error) {
-	file, err := os.Open("config.json")
+func LoadConfiguration(path string) (*Configuration, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
